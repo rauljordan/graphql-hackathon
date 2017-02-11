@@ -47,7 +47,16 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
       const res = await fetch(root[0].url);
       const $ = cheerio.load(await res.text());
       const selector = root.reduce((prev, curr) => {
-        return `${prev} ${curr.tag}`;
+        let tag = '';
+        if(curr.args.id) {
+          tag = `#${curr.args.id}`;
+        } else if (curr.args.class) {
+          tag = `.${curr.args.class}`;
+        }
+
+        const ret = `${prev} ${curr.tag}${tag}`;
+        console.log(ret)
+        return ret;
       }, '');
       return $(selector).html();
     }
