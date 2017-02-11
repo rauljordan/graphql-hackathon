@@ -42,13 +42,13 @@ export const HtmlPage = new GraphQLObjectType({
     // Image,
     url: {
       type: GraphQLString,
-      resolve() {
-        return 'http://graphqlhackathon.com/article/hackathon-winners-made-awesome-scraper';
+      resolve(root, args, context) {
+        return root.url;
       }
     },
     hostname: {
       type: GraphQLString,
-      resolve() {
+      resolve(root, args, context) {
         return 'http://graphqlhackathon.com';
       }
     },

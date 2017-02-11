@@ -21,28 +21,6 @@ export const validHTMLTags = [
   'b',
 ];
 
-
-var queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: {
-    scrape: {
-      type: HtmlPage,
-      // `args` describes the arguments that the `user` query accepts
-      args: {
-        url: { type: GraphQLString }
-      },
-      resolve: function (_, { url }) {
-        return {};
-      }
-    }
-  }
-});
-
-
-
-
-
-
 const DIV_TYPE = {
   div: new GraphQLObjectType({
     name: 'div',
@@ -53,7 +31,23 @@ const DIV_TYPE = {
 };
 
 var schema = new GraphQLSchema({
-  query: queryType,
+  query: new GraphQLObjectType({
+    name: 'Query',
+    fields: {
+      scrape: {
+        type: HtmlPage,
+        // `args` describes the arguments that the `user` query accepts
+        args: {
+          url: { type: GraphQLString }
+        },
+        resolve: function (_, { url }) {
+          return {
+            url
+          };
+        }
+      }
+    }
+  }),
 });
 
 
