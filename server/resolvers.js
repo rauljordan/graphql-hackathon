@@ -7,10 +7,10 @@ import {
 } from 'graphql';
 
 const validAttributes = {
-  id: 'String',
-  class: 'String',
-  src: 'String',
-  content: 'String',
+  id: { type: GraphQLString },
+  class: { type: GraphQLString },
+  src: { type: GraphQLString },
+  content: { type: GraphQLString },
 };
 
 export const validHTMLTags = [
@@ -20,6 +20,32 @@ export const validHTMLTags = [
   'a',
   'b',
 ];
+
+const htmlFields = () => validHTMLTags.reduce((prev, curr) => ({
+  ...prev,
+  [`${curr}`]: {
+    type: HTMLNode,
+    args: {
+      ...validAttributes
+    },
+    resolve(root, args) {
+      console.log(root, args)
+      return {foo: 'bar'};
+    }
+  },
+  content: {
+    type: GraphQLString,
+    resolve(root, args) {
+      return 'alsdkfj'
+    }
+  }
+}), {})
+
+const HTMLNode = new GraphQLObjectType({
+  name: 'HTMLNode',
+  fields: htmlFields,
+});
+
 
 const Image = new GraphQLObjectType({
   name: 'Image',
@@ -54,6 +80,7 @@ const Image = new GraphQLObjectType({
 export const HtmlPage = new GraphQLObjectType({
   name: 'HtmlPage',
   fields: {
+    ...htmlFields(),
     image: {
       type: Image,
       resolve() {
