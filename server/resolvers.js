@@ -104,7 +104,14 @@ export const HtmlPage = new GraphQLObjectType({
       resolve: async (root, args, context) => {
         const res = await fetch(root.url);
         const $ = cheerio.load(await res.text());
-        const links = $('a').map(function() { return $(this).attr('href'); }).get();
+        const links = $('a').map(function() {
+          if (!$(this).attr('href')) {
+            return;
+          }
+          if ($(this).attr('href') !== '#' && $(this).attr('href').indexOf('http') > -1) {
+            return $(this).attr('href');
+          }
+        }).get();
 
         return links.map(url => ({ url }))
       }
@@ -118,13 +125,16 @@ export const HtmlPage = new GraphQLObjectType({
     hostname: {
       type: GraphQLString,
       resolve(root, args, context) {
-        return 'http://graphqlhackathon.com';
+        const match = root.url.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+        return match && match[3];
       }
     },
-    path: {
+    title: {
       type: GraphQLString,
-      resolve() {
-        return '/article/hackathon-winners-made-awesome-scraper'
+      resolve: async (root, args, context) => {
+        const res = await fetch(root.url);
+        const $ = cheerio.load(await res.text());
+        return $('title').text();
       }
     }
   })
