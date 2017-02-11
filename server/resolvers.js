@@ -69,33 +69,22 @@ const HTMLNode = new GraphQLObjectType({
   fields: htmlFields,
 });
 
+const getImgForUrl = async (url) => {
+  const res = await fetch(url);
+  const $ = cheerio.load(await res.text());
+
+  return $('img').map(function() { return $(this).attr('src'); }).get();
+};
+
 const Image = new GraphQLObjectType({
   name: 'Image',
   fields: {
     src: {
       type: GraphQLString,
-      resolve() {
-        return 'cool.jpg';
+      resolve(root) {
+        return root.src;
       }
     },
-    alt: {
-      type: GraphQLString,
-      resolve() {
-        return 'an image';
-      }
-    },
-    width: {
-      type: GraphQLInt,
-      resolve() {
-        return 200;
-      }
-    },
-    height: {
-      type: GraphQLInt,
-      resolve() {
-        return 100;
-      }
-    }
   }
 });
 
@@ -104,12 +93,9 @@ export const HtmlPage = new GraphQLObjectType({
   fields: {
     ...htmlFields(),
     images: {
-      type: new GraphQLList(Image),
+      type: new GraphQLList(GraphQLString),
       resolve(root, args, context) {
-        console.log(root);
-        return [{
-          src: '/img/avatar.png'
-        }];
+        return getImgForUrl(root.url);
       }
     },
     url: {
