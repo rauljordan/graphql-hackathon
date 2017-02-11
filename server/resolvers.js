@@ -6,7 +6,8 @@ import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } from 'graphql';
 
 const validAttributes = {
@@ -37,7 +38,6 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
         args,
         url: root.url || root[0].url,
       }
-      console.log(here)
       return [...root, here];
     }
   },
@@ -55,7 +55,6 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
         }
 
         const ret = `${prev} ${curr.tag}${tag}`;
-        console.log(ret)
         return ret;
       }, '');
       return $(selector).html();
@@ -102,12 +101,13 @@ export const HtmlPage = new GraphQLObjectType({
   name: 'HtmlPage',
   fields: {
     ...htmlFields(),
-    image: {
-      type: Image,
-      resolve() {
-        return {
-          foo: 'foo',
-        }
+    images: {
+      type: new GraphQLList(Image),
+      resolve(root, args, context) {
+        console.log(root);
+        return [{
+          src: '/img/avatar.png'
+        }];
       }
     },
     url: {
