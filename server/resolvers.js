@@ -1,3 +1,6 @@
+import cheerio from 'cheerio';
+import fetch from 'node-fetch';
+
 import {
   graphql,
   GraphQLSchema,
@@ -44,7 +47,6 @@ const HTMLNode = new GraphQLObjectType({
   name: 'HTMLNode',
   fields: htmlFields,
 });
-
 
 const Image = new GraphQLObjectType({
   name: 'Image',
