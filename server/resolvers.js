@@ -23,6 +23,8 @@ export const validHTMLTags = [
   'img',
   'a',
   'b',
+  'i',
+  'p'
 ];
 
 const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
