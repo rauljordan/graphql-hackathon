@@ -32,7 +32,13 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
       ...validAttributes,
     },
     resolve(root, args, context) {
-      return [...root, tag];
+      const here = {
+        tag,
+        args,
+        url: root.url || root[0].url,
+      }
+      console.log(here)
+      return [...root, here];
     }
   },
   content: {
