@@ -21,6 +21,7 @@ export const validHTMLTags = [
   'div',
   'span',
   'img',
+  'body',
   'a',
   'b',
   'i',
@@ -90,12 +91,22 @@ const Image = new GraphQLObjectType({
 
 export const HtmlPage = new GraphQLObjectType({
   name: 'HtmlPage',
-  fields: {
+  fields: () => ({
     ...htmlFields(),
     images: {
       type: new GraphQLList(GraphQLString),
       resolve(root, args, context) {
         return getImgForUrl(root.url);
+      }
+    },
+    links: {
+      type: new GraphQLList(HtmlPage),
+      resolve: async (root, args, context) => {
+        const res = await fetch(root.url);
+        const $ = cheerio.load(await res.text());
+        const links = $('a').map(function() { return $(this).attr('href'); }).get();
+
+        return links.map(url => ({ url }))
       }
     },
     url: {
@@ -116,5 +127,5 @@ export const HtmlPage = new GraphQLObjectType({
         return '/article/hackathon-winners-made-awesome-scraper'
       }
     }
-  }
+  })
 });
