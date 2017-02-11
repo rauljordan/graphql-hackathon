@@ -6,6 +6,21 @@ import {
   GraphQLInt
 } from 'graphql';
 
+const validAttributes = {
+  id: 'String',
+  class: 'String',
+  src: 'String',
+  content: 'String',
+};
+
+export const validHTMLTags = [
+  'div',
+  'span',
+  'img',
+  'a',
+  'b',
+];
+
 const Image = new GraphQLObjectType({
   name: 'Image',
   fields: {
@@ -39,7 +54,14 @@ const Image = new GraphQLObjectType({
 export const HtmlPage = new GraphQLObjectType({
   name: 'HtmlPage',
   fields: {
-    // Image,
+    image: {
+      type: Image,
+      resolve() {
+        return {
+          foo: 'foo',
+        }
+      }
+    },
     url: {
       type: GraphQLString,
       resolve(root, args, context) {

@@ -6,29 +6,6 @@ import {
 } from 'graphql';
 import { HtmlPage } from './resolvers';
 
-const validAttributes = {
-  id: 'String',
-  class: 'String',
-  src: 'String',
-  content: 'String',
-};
-
-export const validHTMLTags = [
-  'div',
-  'span',
-  'img',
-  'a',
-  'b',
-];
-
-const DIV_TYPE = {
-  div: new GraphQLObjectType({
-    name: 'div',
-    fields: {
-
-    }
-  }),
-};
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
