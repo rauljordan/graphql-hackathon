@@ -4,6 +4,7 @@ import {
   GraphQLObjectType,
   GraphQLString
 } from 'graphql';
+import { HtmlPage } from './resolvers';
 
 const validAttributes = {
   id: 'String',
@@ -20,6 +21,28 @@ export const validHTMLTags = [
   'b',
 ];
 
+
+var queryType = new GraphQLObjectType({
+  name: 'Query',
+  fields: {
+    scrape: {
+      type: HtmlPage,
+      // `args` describes the arguments that the `user` query accepts
+      args: {
+        url: { type: GraphQLString }
+      },
+      resolve: function (_, { url }) {
+        return {};
+      }
+    }
+  }
+});
+
+
+
+
+
+
 const DIV_TYPE = {
   div: new GraphQLObjectType({
     name: 'div',
@@ -30,17 +53,7 @@ const DIV_TYPE = {
 };
 
 var schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'RootQueryType',
-    fields: {
-      div: {
-        type: GraphQLObjectType,
-        resolve() {
-          return { foo: 'bar'};
-        }
-      }
-    }
-  })
+  query: queryType,
 });
 
 

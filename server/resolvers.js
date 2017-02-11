@@ -6,31 +6,6 @@ import {
   GraphQLInt
 } from 'graphql';
 
-export const HtmlPage = new GraphQLObjectType({
-  name: 'HtmlPage',
-  fields: {
-    Image,
-    url: {
-      type: GraphQLString,
-      resolve() {
-        return 'http://graphqlhackathon.com/article/hackathon-winners-made-awesome-scraper';
-      }
-    },
-    hostname: {
-      type: GraphQLString,
-      resolve() {
-        return 'http://graphqlhackathon.com';
-      }
-    },
-    path: {
-      type: GraphQLString,
-      resolve() {
-        return '/article/hackathon-winners-made-awesome-scraper'
-      }
-    }
-  }
-});
-
 const Image = new GraphQLObjectType({
   name: 'Image',
   fields: {
@@ -56,6 +31,31 @@ const Image = new GraphQLObjectType({
       type: GraphQLInt,
       resolve() {
         return 100;
+      }
+    }
+  }
+});
+
+export const HtmlPage = new GraphQLObjectType({
+  name: 'HtmlPage',
+  fields: {
+    // Image,
+    url: {
+      type: GraphQLString,
+      resolve() {
+        return 'http://graphqlhackathon.com/article/hackathon-winners-made-awesome-scraper';
+      }
+    },
+    hostname: {
+      type: GraphQLString,
+      resolve() {
+        return 'http://graphqlhackathon.com';
+      }
+    },
+    path: {
+      type: GraphQLString,
+      resolve() {
+        return '/article/hackathon-winners-made-awesome-scraper'
       }
     }
   }
