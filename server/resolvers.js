@@ -25,7 +25,16 @@ export const validHTMLTags = [
   'a',
   'b',
   'i',
-  'p'
+  'p',
+  'h1',
+  'h2',
+  'h3',
+  'article',
+  'footer',
+  'form',
+  'input',
+  'ul',
+  'li'
 ];
 
 const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
