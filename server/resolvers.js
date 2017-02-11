@@ -43,8 +43,13 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
   },
   content: {
     type: GraphQLString,
-    resolve(root, args, context) {
-      return root;
+    resolve: async (root, args, context) => {
+      const res = await fetch(root[0].url);
+      const $ = cheerio.load(await res.text());
+      const selector = root.reduce((prev, curr) => {
+        return `${prev} ${curr.tag}`;
+      }, '');
+      return $(selector).html();
     }
   }
 }), {})
