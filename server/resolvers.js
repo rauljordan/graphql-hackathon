@@ -21,22 +21,21 @@ export const validHTMLTags = [
   'b',
 ];
 
-const htmlFields = () => validHTMLTags.reduce((prev, curr) => ({
+const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
   ...prev,
-  [`${curr}`]: {
+  [`${tag}`]: {
     type: HTMLNode,
     args: {
-      ...validAttributes
+      ...validAttributes,
     },
-    resolve(root, args) {
-      console.log(root, args)
-      return {foo: 'bar'};
+    resolve(root, args, context) {
+      return [...root, tag];
     }
   },
   content: {
     type: GraphQLString,
-    resolve(root, args) {
-      return 'alsdkfj'
+    resolve(root, args, context) {
+      return root;
     }
   }
 }), {})
