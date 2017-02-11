@@ -39,4 +39,4 @@ var schema = new GraphQLSchema({
 });
 
 
-export default schema;
+console.log(schema)
