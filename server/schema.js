@@ -4,8 +4,8 @@ import {
   GraphQLObjectType,
   GraphQLString
 } from 'graphql';
-import { HtmlPage } from './resolvers';
 
+import { HtmlPage } from './resolvers';
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({

@@ -40,7 +40,7 @@ export const validHTMLTags = [
 const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
   ...prev,
   [`${tag}`]: {
-    type: HTMLNode,
+    type: HtmlNode,
     args: {
       ...validAttributes,
     },
@@ -59,44 +59,31 @@ const htmlFields = () => validHTMLTags.reduce((prev, tag) => ({
       const res = await fetch(root[0].url);
       const $ = cheerio.load(await res.text());
       const selector = root.reduce((prev, curr) => {
-        let tag = '';
+        let arg = '';
         if(curr.args.id) {
-          tag = `#${curr.args.id}`;
+          arg = `#${curr.args.id}`;
         } else if (curr.args.class) {
-          tag = `.${curr.args.class}`;
+          arg = `.${curr.args.class}`;
         }
 
-        const ret = `${prev} ${curr.tag}${tag}`;
+        const ret = `${prev} ${curr.tag}${arg}`;
         return ret;
       }, '');
       return $(selector).html();
     }
   }
-}), {})
+}), {});
 
-const HTMLNode = new GraphQLObjectType({
-  name: 'HTMLNode',
+const HtmlNode = new GraphQLObjectType({
+  name: 'HtmlNode',
   fields: htmlFields,
 });
 
-const getImgForUrl = async (url) => {
+const getImgsForUrl = async (url) => {
   const res = await fetch(url);
   const $ = cheerio.load(await res.text());
-
   return $('img').map(function() { return $(this).attr('src'); }).get();
 };
-
-const Image = new GraphQLObjectType({
-  name: 'Image',
-  fields: {
-    src: {
-      type: GraphQLString,
-      resolve(root) {
-        return root.src;
-      }
-    },
-  }
-});
 
 export const HtmlPage = new GraphQLObjectType({
   name: 'HtmlPage',
@@ -105,7 +92,7 @@ export const HtmlPage = new GraphQLObjectType({
     images: {
       type: new GraphQLList(GraphQLString),
       resolve(root, args, context) {
-        return getImgForUrl(root.url);
+        return getImgsForUrl(root.url);
       }
     },
     links: {
